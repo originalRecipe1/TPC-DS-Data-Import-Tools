@@ -1,0 +1,67 @@
+# README
+
+1. docker build -t tpcds-test .
+2. ```shell
+	docker run -it --rm \
+  	-v tpcds-data:/app/data/tables \
+  	-v "$(pwd)/schema:/app/data/schema" \
+  	-v "$(pwd)/queries:/app/data/queries" \
+  	test-tpcds ./build.sh 1
+   ```
+
+MySQL:
+LOAD DATA LOCAL INFILE '/data/customer_address.dat' INTO TABLE customer_address FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/customer_demographics.dat' INTO TABLE customer_demographics FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/income_band.dat' INTO TABLE income_band FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/household_demographics.dat' INTO TABLE household_demographics FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/date_dim.dat' INTO TABLE date_dim FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/customer.dat' INTO TABLE customer FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/call_center.dat' INTO TABLE call_center FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/item.dat' INTO TABLE item FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/promotion.dat' INTO TABLE promotion FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/time_dim.dat' INTO TABLE time_dim FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/store.dat' INTO TABLE store FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/store_sales.dat' INTO TABLE store_sales FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/reason.dat' INTO TABLE reason FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/store_returns.dat' INTO TABLE store_returns FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/web_site.dat' INTO TABLE web_site FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/ship_mode.dat' INTO TABLE ship_mode FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/warehouse.dat' INTO TABLE warehouse FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/web_page.dat' INTO TABLE web_page FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/web_sales.dat' INTO TABLE web_sales FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/web_returns.dat' INTO TABLE web_returns FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/catalog_page.dat' INTO TABLE catalog_page FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/catalog_returns.dat' INTO TABLE catalog_returns FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/catalog_sales.dat' INTO TABLE catalog_sales FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/inventory.dat' INTO TABLE inventory FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+LOAD DATA LOCAL INFILE '/data/dbgen_version.dat' INTO TABLE dbgen_version FIELDS TERMINATED BY '|' LINES TERMINATED BY '\n';
+
+
+PostgreSQL:
+COPY customer_address FROM '/data/customer_address.dat' DELIMITER '|' NULL '';
+COPY customer_demographics FROM '/data/customer_demographics.dat' DELIMITER '|' NULL '';
+COPY income_band FROM '/data/income_band.dat' DELIMITER '|' NULL '';
+COPY household_demographics FROM '/data/household_demographics.dat' DELIMITER '|' NULL '';
+COPY date_dim FROM '/data/date_dim.dat' DELIMITER '|' NULL '';
+COPY customer FROM '/data/customer.dat' DELIMITER '|' NULL '';
+COPY call_center FROM '/data/call_center.dat' DELIMITER '|' NULL '';
+COPY item FROM '/data/item.dat' DELIMITER '|' NULL '';
+COPY promotion FROM '/data/promotion.dat' DELIMITER '|' NULL '';
+COPY time_dim FROM '/data/time_dim.dat' DELIMITER '|' NULL '';
+COPY store FROM '/data/store.dat' DELIMITER '|' NULL '';
+COPY store_sales FROM '/data/store_sales.dat' DELIMITER '|' NULL '';
+COPY reason FROM '/data/reason.dat' DELIMITER '|' NULL '';
+COPY store_returns FROM '/data/store_returns.dat' DELIMITER '|' NULL '';
+COPY web_site FROM '/data/web_site.dat' DELIMITER '|' NULL '';
+COPY ship_mode FROM '/data/ship_mode.dat' DELIMITER '|' NULL '';
+COPY warehouse FROM '/data/warehouse.dat' DELIMITER '|' NULL '';
+COPY web_page FROM '/data/web_page.dat' DELIMITER '|' NULL '';
+COPY web_sales FROM '/data/web_sales.dat' DELIMITER '|' NULL '';
+COPY web_returns FROM '/data/web_returns.dat' DELIMITER '|' NULL '';
+COPY catalog_page FROM '/data/catalog_page.dat' DELIMITER '|' NULL '';
+COPY catalog_returns FROM '/data/catalog_returns.dat' DELIMITER '|' NULL '';
+COPY catalog_sales FROM '/data/catalog_sales.dat' DELIMITER '|' NULL '';
+COPY inventory FROM '/data/inventory.dat' DELIMITER '|' NULL '';
+COPY dbgen_version FROM '/data/dbgen_version.dat' DELIMITER '|' NULL '';
+
+
