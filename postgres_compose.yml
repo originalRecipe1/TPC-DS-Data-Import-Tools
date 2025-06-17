@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  postgres20:
+    image: postgres:17.5-alpine3.22
+    container_name: postgres_ds1
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: db1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5439:5432"
+    volumes:
+      - tpcds-data:/data
+      - pgvolume20:/var/lib/postgresql/data
+      
+      
+  postgres21:
+    image: postgres:17.5-alpine3.22
+    container_name: postgres_ds2
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: db1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5440:5432"
+    volumes:
+      - tpcds-data:/data
+      - pgvolume21:/var/lib/postgresql/data
+      
+      
+  postgres22:
+    image: postgres:17.5-alpine3.22
+    container_name: postgres_ds3
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: db1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5441:5432"
+    volumes:
+      - tpcds-data:/data
+      - pgvolume22:/var/lib/postgresql/data
+
+  
+
+
+volumes:
+  pgvolume20:
+  pgvolume21:
+  pgvolume22:
+  tpcds-data:
+    external: true
+

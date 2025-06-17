@@ -1,0 +1,57 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_ds
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_DB: db1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456
+    ports:
+      - "5439:5432"
+    volumes:
+      - tpcds-data:/data
+      - pgvolume2:/var/lib/postgresql/data
+
+  mysql:
+    image: bitnami/mysql:latest
+    container_name: mysql_ds
+    #restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db1
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: 123456
+      MYSQL_EXTRA_FLAGS: "--secure-file-priv=/data --local-infile=ON"
+    ports:
+      - "3308:3306"
+    volumes:
+      - mysql_data2:/var/lib/mysql
+      - ./custom-mysql.cnf:/etc/mysql/conf.d/custom-mysql.cnf
+      - tpcds-data:/data
+
+  mariadb:
+    image: mariadb:latest
+    container_name: mariadb_ds
+    #restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: db1
+      MYSQL_USER: mariadb
+      MYSQL_PASSWORD: 123456
+    ports:
+      - "3309:3306"
+    volumes:
+      - mariadb_data2:/var/lib/mysql
+      - tpcds-data:/data
+
+
+volumes:
+  pgvolume2:
+  mysql_data2:
+  mariadb_data2:
+  tpcds-data:
+    external: true
+
