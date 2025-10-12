@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   postgres:
     image: postgres:latest
@@ -16,7 +14,7 @@ services:
       - pgvolume2:/var/lib/postgresql/data
 
   mysql:
-    image: bitnami/mysql:latest
+    image: mysql:8.0
     container_name: mysql_ds
     #restart: always
     environment:
@@ -24,13 +22,13 @@ services:
       MYSQL_DATABASE: db1
       MYSQL_USER: mysql
       MYSQL_PASSWORD: 123456
-      MYSQL_EXTRA_FLAGS: "--secure-file-priv=/data --local-infile=ON"
     ports:
       - "3308:3306"
     volumes:
       - mysql_data2:/var/lib/mysql
       - ./custom-mysql.cnf:/etc/mysql/conf.d/custom-mysql.cnf
       - tpcds-data:/data
+    command: --secure-file-priv=""
 
   mariadb:
     image: mariadb:latest
@@ -45,7 +43,9 @@ services:
       - "3309:3306"
     volumes:
       - mariadb_data2:/var/lib/mysql
+      - ./custom-mariadb.cnf:/etc/mysql/conf.d/custom-mariadb.cnf
       - tpcds-data:/data
+    command: --secure-file-priv=""
 
 
 volumes:

@@ -7,9 +7,9 @@ SELECT i_item_id ,
        i_current_price ,
        sum(cs_ext_sales_price) AS itemrevenue ,
        sum(cs_ext_sales_price)*100/sum(sum(cs_ext_sales_price)) OVER (PARTITION BY i_class) AS revenueratio
-FROM catalog_sales ,
-     item ,
-     date_dim
+FROM postgres_ds3.public.catalog_sales ,
+     postgres_ds2.public.item ,
+     postgres_ds1.public.date_dim
 WHERE cs_item_sk = i_item_sk
     AND i_category IN ('Jewelry',
                        'Sports',

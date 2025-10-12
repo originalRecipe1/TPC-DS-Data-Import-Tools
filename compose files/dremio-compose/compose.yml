@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  dremio-coordinator:
+    build:
+      context: .
+      dockerfile: Dockerfile.dremio-java17
+    container_name: dremio-coordinator
+    volumes:
+      - ./dremio-coordinator/dremio.conf:/opt/dremio/conf/dremio.conf
+    environment:
+      - DREMIO_MAX_HEAP_MEMORY_SIZE_MB=16384    # 16GB heap
+      - DREMIO_MAX_DIRECT_MEMORY_SIZE_MB=24576
+    ports:
+      - "9047:9047"   # UI / REST
+      - "31010:31010" # Arrow Flight / JDBC
+      - "32010:32010"
+      - "45678:45678" # internal
+
+  dremio-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.dremio-java17
+    container_name: dremio-worker
+    volumes:
+      - ./dremio-worker/dremio.conf:/opt/dremio/conf/dremio.conf
+    environment:
+      - DREMIO_MAX_HEAP_MEMORY_SIZE_MB=16384    # 16GB heap
+      - DREMIO_MAX_DIRECT_MEMORY_SIZE_MB=24576 
+    depends_on: [dremio-coordinator]
+
+

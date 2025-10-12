@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   postgres20:
-    image: postgres:17.5-alpine3.22
+    image: postgres:latest
     container_name: postgres_ds1
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
@@ -17,7 +17,7 @@ services:
       
       
   postgres21:
-    image: postgres:17.5-alpine3.22
+    image: postgres:latest
     container_name: postgres_ds2
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata
@@ -32,7 +32,7 @@ services:
       
       
   postgres22:
-    image: postgres:17.5-alpine3.22
+    image: postgres:latest
     container_name: postgres_ds3
     environment:
       PGDATA: /var/lib/postgresql/data/pgdata

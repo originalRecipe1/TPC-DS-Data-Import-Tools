@@ -14,9 +14,9 @@ SELECT cd_gender,
        count(*) cnt5,
        cd_dep_college_count,
        count(*) cnt6
-FROM customer c,
-     customer_address ca,
-     customer_demographics
+FROM postgres_ds2.public.customer c,
+     postgres_ds1.public.customer_address ca,
+     postgres_ds3.public.customer_demographics
 WHERE c.c_current_addr_sk = ca.ca_address_sk
     AND ca_county IN ('Walker County',
                       'Richland County',
@@ -26,24 +26,24 @@ WHERE c.c_current_addr_sk = ca.ca_address_sk
     AND cd_demo_sk = c.c_current_cdemo_sk
     AND EXISTS
         (SELECT *
-         FROM store_sales,
-              date_dim
+         FROM postgres_ds3.public.store_sales,
+              postgres_ds2.public.date_dim
          WHERE c.c_customer_sk = ss_customer_sk
              AND ss_sold_date_sk = d_date_sk
              AND d_year = 2002
              AND d_moy BETWEEN 4 AND 4+3)
     AND (EXISTS
              (SELECT *
-              FROM web_sales,
-                   date_dim
+              FROM postgres_ds1.public.web_sales,
+                   postgres_ds2.public.date_dim
               WHERE c.c_customer_sk = ws_bill_customer_sk
                   AND ws_sold_date_sk = d_date_sk
                   AND d_year = 2002
                   AND d_moy BETWEEN 4 AND 4+3)
          OR EXISTS
              (SELECT *
-              FROM catalog_sales,
-                   date_dim
+              FROM postgres_ds3.public.catalog_sales,
+                   postgres_ds2.public.date_dim
               WHERE c.c_customer_sk = cs_ship_customer_sk
                   AND cs_sold_date_sk = d_date_sk
                   AND d_year = 2002

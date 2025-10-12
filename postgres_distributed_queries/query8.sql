@@ -2,14 +2,14 @@
 
 SELECT s_store_name ,
        sum(ss_net_profit)
-FROM store_sales ,
-     date_dim ,
-     store,
+FROM postgres_ds3.public.store_sales ,
+     postgres_ds2.public.date_dim ,
+     postgres_ds1.public.store,
 
     (SELECT ca_zip
      FROM
          (SELECT substr(ca_zip, 1, 5) ca_zip
-          FROM customer_address
+          FROM postgres_ds1.public.customer_address
           WHERE substr(ca_zip, 1, 5) IN ('89436',
                                          '30868',
                                          '65085',
@@ -414,8 +414,8 @@ FROM store_sales ,
               FROM
                   (SELECT substr(ca_zip, 1, 5) ca_zip,
                           count(*) cnt
-                   FROM customer_address,
-                        customer
+                   FROM postgres_ds2.public.customer_address,
+                        postgres_ds3.public.customer
                    WHERE ca_address_sk = c_current_addr_sk
                        AND c_preferred_cust_flag='Y'
                    GROUP BY ca_zip

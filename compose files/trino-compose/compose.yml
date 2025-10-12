@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  trino-coordinator:
+    image: trinodb/trino:latest
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./trino-coordinator/config.properties:/etc/trino/config.properties
+      - ./trino-coordinator/jvm.config:/etc/trino/jvm.config
+      - ./trino-coordinator/postgres1.properties:/etc/trino/catalog/postgres1.properties
+      - ./trino-coordinator/postgres2.properties:/etc/trino/catalog/postgres2.properties
+      - ./trino-coordinator/postgres3.properties:/etc/trino/catalog/postgres3.properties
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sS http://localhost:8080/|| exit 1" ]
+      interval: "5s"
+      timeout: "5s"
+      retries: 3
+
+  trino-worker:
+    image: trinodb/trino:latest
+    ports:
+      - "8082-8091:8080"
+    volumes:
+      - ./trino-worker/config.properties:/etc/trino/config.properties
+      - ./trino-worker/jvm.config:/etc/trino/jvm.config
+      - ./trino-worker/postgres1.properties:/etc/trino/catalog/postgres1.properties
+      - ./trino-worker/postgres2.properties:/etc/trino/catalog/postgres2.properties
+      - ./trino-worker/postgres3.properties:/etc/trino/catalog/postgres3.properties
+    depends_on:
+      trino-coordinator:
+        condition: service_healthy

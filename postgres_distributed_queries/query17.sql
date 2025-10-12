@@ -15,14 +15,14 @@ SELECT i_item_id ,
        avg(cs_quantity) AS catalog_sales_quantityave ,
        stddev_samp(cs_quantity) AS catalog_sales_quantitystdev ,
        stddev_samp(cs_quantity)/avg(cs_quantity) AS catalog_sales_quantitycov
-FROM store_sales ,
-     store_returns ,
-     catalog_sales ,
-     date_dim d1 ,
-     date_dim d2 ,
-     date_dim d3 ,
-     store ,
-     item
+FROM postgres_ds1.public.store_sales ,
+     postgres_ds2.public.store_returns ,
+     postgres_ds1.public.catalog_sales ,
+     postgres_ds3.public.date_dim d1 ,
+     postgres_ds2.public.date_dim d2 ,
+     postgres_ds3.public.date_dim d3 ,
+     postgres_ds1.public.store ,
+     postgres_ds2.public.item
 WHERE d1.d_quarter_name = '1998Q1'
     AND d1.d_date_sk = ss_sold_date_sk
     AND i_item_sk = ss_item_sk

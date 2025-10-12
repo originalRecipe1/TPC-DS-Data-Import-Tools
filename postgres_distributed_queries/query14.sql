@@ -1,30 +1,30 @@
 -- start query 1 in stream 0 using template query14.tpl
 WITH cross_items AS
     (SELECT i_item_sk ss_item_sk
-     FROM item,
+     FROM postgres_ds1.public.item,
          (SELECT iss.i_brand_id brand_id ,
                  iss.i_class_id class_id ,
                  iss.i_category_id category_id
-          FROM store_sales ,
-               item iss ,
-               date_dim d1
+          FROM postgres_ds1.public.store_sales ,
+               postgres_ds2.public.item iss ,
+               postgres_ds3.public.date_dim d1
           WHERE ss_item_sk = iss.i_item_sk
               AND ss_sold_date_sk = d1.d_date_sk
               AND d1.d_year BETWEEN 1998 AND 1998 + 2 INTERSECT
               SELECT ics.i_brand_id ,
                      ics.i_class_id ,
                      ics.i_category_id
-              FROM catalog_sales ,
-                   item ics ,
-                   date_dim d2 WHERE cs_item_sk = ics.i_item_sk
+              FROM postgres_ds2.public.catalog_sales ,
+                   postgres_ds1.public.item ics ,
+                   postgres_ds3.public.date_dim d2 WHERE cs_item_sk = ics.i_item_sk
               AND cs_sold_date_sk = d2.d_date_sk
               AND d2.d_year BETWEEN 1998 AND 1998 + 2 INTERSECT
               SELECT iws.i_brand_id ,
                      iws.i_class_id ,
                      iws.i_category_id
-              FROM web_sales ,
-                   item iws ,
-                   date_dim d3 WHERE ws_item_sk = iws.i_item_sk
+              FROM postgres_ds3.public.web_sales ,
+                   postgres_ds2.public.item iws ,
+                   postgres_ds1.public.date_dim d3 WHERE ws_item_sk = iws.i_item_sk
               AND ws_sold_date_sk = d3.d_date_sk
               AND d3.d_year BETWEEN 1998 AND 1998 + 2)
      WHERE i_brand_id = brand_id
@@ -35,20 +35,20 @@ WITH cross_items AS
      FROM
          (SELECT ss_quantity quantity ,
                  ss_list_price list_price
-          FROM store_sales ,
-               date_dim
+          FROM postgres_ds3.public.store_sales ,
+               postgres_ds2.public.date_dim
           WHERE ss_sold_date_sk = d_date_sk
               AND d_year BETWEEN 1998 AND 1998 + 2
           UNION ALL SELECT cs_quantity quantity ,
                            cs_list_price list_price
-          FROM catalog_sales ,
-               date_dim
+          FROM postgres_ds2.public.catalog_sales ,
+               postgres_ds1.public.date_dim
           WHERE cs_sold_date_sk = d_date_sk
               AND d_year BETWEEN 1998 AND 1998 + 2
           UNION ALL SELECT ws_quantity quantity ,
                            ws_list_price list_price
-          FROM web_sales ,
-               date_dim
+          FROM postgres_ds3.public.web_sales ,
+               postgres_ds2.public.date_dim
           WHERE ws_sold_date_sk = d_date_sk
               AND d_year BETWEEN 1998 AND 1998 + 2) x)
 SELECT channel,
@@ -64,9 +64,9 @@ FROM
                     i_category_id,
                     sum(ss_quantity*ss_list_price) sales ,
                     count(*) number_sales
-     FROM store_sales ,
-          item ,
-          date_dim
+     FROM postgres_ds3.public.store_sales ,
+          postgres_ds1.public.item ,
+          postgres_ds2.public.date_dim
      WHERE ss_item_sk IN
              (SELECT ss_item_sk
               FROM cross_items)
@@ -86,9 +86,9 @@ FROM
                                 i_category_id,
                                 sum(cs_quantity*cs_list_price) sales,
                                 count(*) number_sales
-     FROM catalog_sales ,
-          item ,
-          date_dim
+     FROM postgres_ds3.public.catalog_sales ,
+          postgres_ds2.public.item ,
+          postgres_ds1.public.date_dim
      WHERE cs_item_sk IN
              (SELECT ss_item_sk
               FROM cross_items)
@@ -108,9 +108,9 @@ FROM
                             i_category_id,
                             sum(ws_quantity*ws_list_price) sales,
                             count(*) number_sales
-     FROM web_sales ,
-          item ,
-          date_dim
+     FROM postgres_ds1.public.web_sales ,
+          postgres_ds3.public.item ,
+          postgres_ds2.public.date_dim
      WHERE ws_item_sk IN
              (SELECT ss_item_sk
               FROM cross_items)
@@ -136,31 +136,31 @@ LIMIT 100;
 
 WITH cross_items AS
     (SELECT i_item_sk ss_item_sk
-     FROM item,
+     FROM postgres_ds2.public.item,
 
          (SELECT iss.i_brand_id brand_id ,
                  iss.i_class_id class_id ,
                  iss.i_category_id category_id
-          FROM store_sales ,
-               item iss ,
-               date_dim d1
+          FROM postgres_ds1.public.store_sales ,
+               postgres_ds3.public.item iss ,
+               postgres_ds2.public.date_dim d1
           WHERE ss_item_sk = iss.i_item_sk
               AND ss_sold_date_sk = d1.d_date_sk
               AND d1.d_year BETWEEN 1998 AND 1998 + 2 INTERSECT
               SELECT ics.i_brand_id ,
                      ics.i_class_id ,
                      ics.i_category_id
-              FROM catalog_sales ,
-                   item ics ,
-                   date_dim d2 WHERE cs_item_sk = ics.i_item_sk
+              FROM postgres_ds3.public.catalog_sales ,
+                   postgres_ds1.public.item ics ,
+                   postgres_ds2.public.date_dim d2 WHERE cs_item_sk = ics.i_item_sk
               AND cs_sold_date_sk = d2.d_date_sk
               AND d2.d_year BETWEEN 1998 AND 1998 + 2 INTERSECT
               SELECT iws.i_brand_id ,
                      iws.i_class_id ,
                      iws.i_category_id
-              FROM web_sales ,
-                   item iws ,
-                   date_dim d3 WHERE ws_item_sk = iws.i_item_sk
+              FROM postgres_ds1.public.web_sales ,
+                   postgres_ds2.public.item iws ,
+                   postgres_ds3.public.date_dim d3 WHERE ws_item_sk = iws.i_item_sk
               AND ws_sold_date_sk = d3.d_date_sk
               AND d3.d_year BETWEEN 1998 AND 1998 + 2) x
      WHERE i_brand_id = brand_id
@@ -171,20 +171,20 @@ WITH cross_items AS
      FROM
          (SELECT ss_quantity quantity ,
                  ss_list_price list_price
-          FROM store_sales ,
-               date_dim
+          FROM postgres_ds2.public.store_sales ,
+               postgres_ds1.public.date_dim
           WHERE ss_sold_date_sk = d_date_sk
               AND d_year BETWEEN 1998 AND 1998 + 2
           UNION ALL SELECT cs_quantity quantity ,
                            cs_list_price list_price
-          FROM catalog_sales ,
-               date_dim
+          FROM postgres_ds3.public.catalog_sales ,
+               postgres_ds2.public.date_dim
           WHERE cs_sold_date_sk = d_date_sk
               AND d_year BETWEEN 1998 AND 1998 + 2
           UNION ALL SELECT ws_quantity quantity ,
                            ws_list_price list_price
-          FROM web_sales ,
-               date_dim
+          FROM postgres_ds3.public.web_sales ,
+               postgres_ds1.public.date_dim
           WHERE ws_sold_date_sk = d_date_sk
               AND d_year BETWEEN 1998 AND 1998 + 2) x)
 SELECT this_year.channel ty_channel ,
@@ -206,9 +206,9 @@ FROM
                     i_category_id ,
                     sum(ss_quantity*ss_list_price) sales,
                     count(*) number_sales
-     FROM store_sales ,
-          item ,
-          date_dim
+     FROM postgres_ds1.public.store_sales ,
+          postgres_ds3.public.item ,
+          postgres_ds2.public.date_dim
      WHERE ss_item_sk IN
              (SELECT ss_item_sk
               FROM cross_items)
@@ -216,7 +216,7 @@ FROM
          AND ss_sold_date_sk = d_date_sk
          AND d_week_seq =
              (SELECT d_week_seq
-              FROM date_dim
+              FROM postgres_ds1.public.date_dim
               WHERE d_year = 1998 + 1
                   AND d_moy = 12
                   AND d_dom = 16)
@@ -233,9 +233,9 @@ FROM
                     i_category_id,
                     sum(ss_quantity*ss_list_price) sales,
                     count(*) number_sales
-     FROM store_sales ,
-          item ,
-          date_dim
+     FROM postgres_ds2.public.store_sales ,
+          postgres_ds3.public.item ,
+          postgres_ds1.public.date_dim
      WHERE ss_item_sk IN
              (SELECT ss_item_sk
               FROM cross_items)
@@ -243,7 +243,7 @@ FROM
          AND ss_sold_date_sk = d_date_sk
          AND d_week_seq =
              (SELECT d_week_seq
-              FROM date_dim
+              FROM postgres_ds3.public.date_dim
               WHERE d_year = 1998
                   AND d_moy = 12
                   AND d_dom = 16)

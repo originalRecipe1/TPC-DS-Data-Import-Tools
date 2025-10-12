@@ -1,0 +1,23 @@
+[
+  {
+    "name": "postgres1",
+    "username": "postgres",
+    "password": "123456",
+    "url": "jdbc:postgresql://192.168.178.113:5439/db1",
+    "tables": ["store_sales", "dbgen_version", "customer_address", "customer_demographics", "date_dim", "warehouse", "ship_mode", "time_dim", "reason", "income_band", "item", "store", "call_center", "customer", "web_site", "store_returns", "household_demographics", "web_page", "promotion", "catalog_page", "inventory", "catalog_returns", "web_returns", "web_sales", "catalog_sales"]
+  },
+  {
+    "name": "postgres2",
+    "username": "postgres",
+    "password": "123456",
+    "url": "jdbc:postgresql://192.168.178.113:5440/db1",
+    "tables": ["store_sales", "dbgen_version", "customer_address", "customer_demographics", "date_dim", "warehouse", "ship_mode", "time_dim", "reason", "income_band", "item", "store", "call_center", "customer", "web_site", "store_returns", "household_demographics", "web_page", "promotion", "catalog_page", "inventory", "catalog_returns", "web_returns", "web_sales", "catalog_sales"]
+  },
+  {
+    "name": "postgres3",
+    "username": "postgres",
+    "password": "123456",
+    "url": "jdbc:postgresql://192.168.178.113:5441/db1",
+    "tables": ["store_sales", "dbgen_version", "customer_address", "customer_demographics", "date_dim", "warehouse", "ship_mode", "time_dim", "reason", "income_band", "item", "store", "call_center", "customer", "web_site", "store_returns", "household_demographics", "web_page", "promotion", "catalog_page", "inventory", "catalog_returns", "web_returns", "web_sales", "catalog_sales"]
+  }
+]

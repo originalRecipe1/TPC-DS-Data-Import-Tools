@@ -11,13 +11,13 @@ SELECT i_item_id,
        avg(cast(cs_net_profit AS decimal(12, 2))) agg5,
        avg(cast(c_birth_year AS decimal(12, 2))) agg6,
        avg(cast(cd1.cd_dep_count AS decimal(12, 2))) agg7
-FROM catalog_sales,
-     customer_demographics cd1,
-     customer_demographics cd2,
-     customer,
-     customer_address,
-     date_dim,
-     item
+FROM postgres_ds2.public.catalog_sales,
+     postgres_ds1.public.customer_demographics cd1,
+     postgres_ds3.public.customer_demographics cd2,
+     postgres_ds2.public.customer,
+     postgres_ds1.public.customer_address,
+     postgres_ds2.public.date_dim,
+     postgres_ds3.public.item
 WHERE cs_sold_date_sk = d_date_sk
     AND cs_item_sk = i_item_sk
     AND cs_bill_cdemo_sk = cd1.cd_demo_sk

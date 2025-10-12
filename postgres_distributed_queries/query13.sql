@@ -4,12 +4,12 @@ SELECT avg(ss_quantity) ,
        avg(ss_ext_sales_price) ,
        avg(ss_ext_wholesale_cost) ,
        sum(ss_ext_wholesale_cost)
-FROM store_sales ,
-     store ,
-     customer_demographics ,
-     household_demographics ,
-     customer_address ,
-     date_dim
+FROM postgres_ds3.public.store_sales ,
+     postgres_ds1.public.store ,
+     postgres_ds2.public.customer_demographics ,
+     postgres_ds1.public.household_demographics ,
+     postgres_ds3.public.customer_address ,
+     postgres_ds2.public.date_dim
 WHERE s_store_sk = ss_store_sk
     AND ss_sold_date_sk = d_date_sk
     AND d_year = 2001 and((ss_hdemo_sk=hd_demo_sk

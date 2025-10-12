@@ -12,10 +12,10 @@ FROM
                     WHEN (cast(d_date AS date) >= CAST ('1998-04-08' AS date)) THEN inv_quantity_on_hand
                     ELSE 0
                 END) AS inv_after
-     FROM inventory ,
-          warehouse ,
-          item ,
-          date_dim
+     FROM postgres_ds3.inventory ,
+          postgres_ds1.warehouse ,
+          postgres_ds2.item ,
+          postgres_ds1.date_dim
      WHERE i_current_price BETWEEN 0.99 AND 1.49
          AND i_item_sk = inv_item_sk
          AND inv_warehouse_sk = w_warehouse_sk

@@ -12,16 +12,16 @@ WITH ssr AS
                  ss_net_profit AS profit,
                  cast(0 AS decimal(7, 2)) AS return_amt,
                  cast(0 AS decimal(7, 2)) AS net_loss
-          FROM store_sales
+          FROM postgres_ds3.public.store_sales
           UNION ALL SELECT sr_store_sk AS store_sk,
                            sr_returned_date_sk AS date_sk,
                            cast(0 AS decimal(7, 2)) AS sales_price,
                            cast(0 AS decimal(7, 2)) AS profit,
                            sr_return_amt AS return_amt,
                            sr_net_loss AS net_loss
-          FROM store_returns) salesreturns,
-          date_dim,
-          store
+          FROM postgres_ds1.public.store_returns) salesreturns,
+          postgres_ds3.public.date_dim,
+          postgres_ds2.public.store
      WHERE date_sk = d_date_sk
          AND d_date BETWEEN cast('1998-08-04' AS date) AND (cast('1998-08-04' AS date) + 14 days)
          AND store_sk = s_store_sk
@@ -39,16 +39,16 @@ WITH ssr AS
                  cs_net_profit AS profit,
                  cast(0 AS decimal(7, 2)) AS return_amt,
                  cast(0 AS decimal(7, 2)) AS net_loss
-          FROM catalog_sales
+          FROM postgres_ds1.public.catalog_sales
           UNION ALL SELECT cr_catalog_page_sk AS page_sk,
                            cr_returned_date_sk AS date_sk,
                            cast(0 AS decimal(7, 2)) AS sales_price,
                            cast(0 AS decimal(7, 2)) AS profit,
                            cr_return_amount AS return_amt,
                            cr_net_loss AS net_loss
-          FROM catalog_returns) salesreturns,
-          date_dim,
-          catalog_page
+          FROM postgres_ds2.public.catalog_returns) salesreturns,
+          postgres_ds3.public.date_dim,
+          postgres_ds1.public.catalog_page
      WHERE date_sk = d_date_sk
          AND d_date BETWEEN cast('1998-08-04' AS date) AND (cast('1998-08-04' AS date) + 14 days)
          AND page_sk = cp_catalog_page_sk
@@ -66,18 +66,18 @@ WITH ssr AS
                  ws_net_profit AS profit,
                  cast(0 AS decimal(7, 2)) AS return_amt,
                  cast(0 AS decimal(7, 2)) AS net_loss
-          FROM web_sales
+          FROM postgres_ds3.public.web_sales
           UNION ALL SELECT ws_web_site_sk AS wsr_web_site_sk,
                            wr_returned_date_sk AS date_sk,
                            cast(0 AS decimal(7, 2)) AS sales_price,
                            cast(0 AS decimal(7, 2)) AS profit,
                            wr_return_amt AS return_amt,
                            wr_net_loss AS net_loss
-          FROM web_returns
+          FROM postgres_ds1.public.web_returns
           LEFT OUTER JOIN web_sales ON (wr_item_sk = ws_item_sk
                                         AND wr_order_number = ws_order_number)) salesreturns,
-          date_dim,
-          web_site
+          postgres_ds2.public.date_dim,
+          postgres_ds1.public.web_site
      WHERE date_sk = d_date_sk
          AND d_date BETWEEN cast('1998-08-04' AS date) AND (cast('1998-08-04' AS date) + 14 days)
          AND wsr_web_site_sk = web_site_sk

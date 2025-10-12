@@ -1,0 +1,32 @@
+services:
+  presto-coordinator:
+    image: prestodb/presto:latest
+    ports:
+      - "8180:8080"
+    volumes:
+      - ./presto-coordinator/config.properties:/opt/presto-server/etc/config.properties
+      - ./presto-coordinator/postgres1.properties:/opt/presto-server/etc/catalog/postgres1.properties
+      - ./presto-coordinator/postgres2.properties:/opt/presto-server/etc/catalog/postgres2.properties
+      - ./presto-coordinator/postgres3.properties:/opt/presto-server/etc/catalog/postgres3.properties
+      - ./jvm.config:/opt/presto-server/etc/jvm.config
+      - ./libjvmkill.so:/opt/presto-server/lib/libjvmkill.so
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sS http://localhost:8080/|| exit 1" ]
+      interval: "5s"
+      timeout: "5s"
+      retries: 3
+
+  presto-worker:
+    image: prestodb/presto:latest
+    ports:
+      - "8181-8190:8080"
+    volumes:
+      - ./presto-worker/config.properties:/opt/presto-server/etc/config.properties
+      - ./presto-worker/postgres1.properties:/opt/presto-server/etc/catalog/postgres1.properties
+      - ./presto-worker/postgres2.properties:/opt/presto-server/etc/catalog/postgres2.properties
+      - ./presto-worker/postgres3.properties:/opt/presto-server/etc/catalog/postgres3.properties
+      - ./jvm.config:/opt/presto-server/etc/jvm.config
+      - ./libjvmkill.so:/opt/presto-server/lib/libjvmkill.so
+    depends_on:
+      presto-coordinator:
+        condition: service_healthy

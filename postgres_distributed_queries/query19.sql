@@ -5,12 +5,12 @@ SELECT i_brand_id brand_id,
        i_manufact_id,
        i_manufact,
        sum(ss_ext_sales_price) ext_price
-FROM date_dim,
-     store_sales,
-     item,
-     customer,
-     customer_address,
-     store
+FROM postgres_ds1.public.date_dim,
+     postgres_ds2.public.store_sales,
+     postgres_ds3.public.item,
+     postgres_ds2.public.customer,
+     postgres_ds1.public.customer_address,
+     postgres_ds3.public.store
 WHERE d_date_sk = ss_sold_date_sk
     AND ss_item_sk = i_item_sk
     AND i_manager_id=7

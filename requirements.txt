@@ -1,0 +1,7 @@
+# Python dependencies for TPC-DS import scripts
+
+# PostgreSQL
+psycopg2-binary>=2.9.0
+
+# MySQL and MariaDB
+mysql-connector-python>=8.0.0

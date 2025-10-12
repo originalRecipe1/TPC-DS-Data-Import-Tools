@@ -1,70 +1,52 @@
 -- start query 1 in stream 0 using template query41.tpl
-
-SELECT distinct(i_product_name)
-FROM item i1
-WHERE i_manufact_id BETWEEN 742 AND 742+40
-    AND
-        (SELECT count(*) AS item_cnt
-         FROM item
-         WHERE (i_manufact = i1.i_manufact
-                AND ((i_category = 'Women'
-                      AND (i_color = 'orchid'
-                           OR i_color = 'papaya')
-                      AND (i_units = 'Pound'
-                           OR i_units = 'Lb')
-                      AND (i_size = 'petite'
-                           OR i_size = 'medium'))
-                     OR (i_category = 'Women'
-                         AND (i_color = 'burlywood'
-                              OR i_color = 'navy')
-                         AND (i_units = 'Bundle'
-                              OR i_units = 'Each')
-                         AND (i_size = 'N/A'
-                              OR i_size = 'extra large'))
-                     OR (i_category = 'Men'
-                         AND (i_color = 'bisque'
-                              OR i_color = 'azure')
-                         AND (i_units = 'N/A'
-                              OR i_units = 'Tsp')
-                         AND (i_size = 'small'
-                              OR i_size = 'large'))
-                     OR (i_category = 'Men'
-                         AND (i_color = 'chocolate'
-                              OR i_color = 'cornflower')
-                         AND (i_units = 'Bunch'
-                              OR i_units = 'Gross')
-                         AND (i_size = 'petite'
-                              OR i_size = 'medium'))))
-             OR (i_manufact = i1.i_manufact
-                 AND ((i_category = 'Women'
-                       AND (i_color = 'salmon'
-                            OR i_color = 'midnight')
-                       AND (i_units = 'Oz'
-                            OR i_units = 'Box')
-                       AND (i_size = 'petite'
-                            OR i_size = 'medium'))
-                      OR (i_category = 'Women'
-                          AND (i_color = 'snow'
-                               OR i_color = 'steel')
-                          AND (i_units = 'Carton'
-                               OR i_units = 'Tbl')
-                          AND (i_size = 'N/A'
-                               OR i_size = 'extra large'))
-                      OR (i_category = 'Men'
-                          AND (i_color = 'purple'
-                               OR i_color = 'gainsboro')
-                          AND (i_units = 'Dram'
-                               OR i_units = 'Unknown')
-                          AND (i_size = 'small'
-                               OR i_size = 'large'))
-                      OR (i_category = 'Men'
-                          AND (i_color = 'metallic'
-                               OR i_color = 'forest')
-                          AND (i_units = 'Gram'
-                               OR i_units = 'Ounce')
-                          AND (i_size = 'petite'
-                               OR i_size = 'medium'))))) > 0
-ORDER BY i_product_name
-LIMIT 100;
+select  distinct(i_product_name)
+ from item i1
+ where i_manufact_id between 742 and 742+40 
+   and (select count(*) as item_cnt
+        from item
+        where (i_manufact = i1.i_manufact and
+        ((i_category = 'Women' and 
+        (i_color = 'orchid' or i_color = 'papaya') and 
+        (i_units = 'Pound' or i_units = 'Lb') and
+        (i_size = 'petite' or i_size = 'medium')
+        ) or
+        (i_category = 'Women' and
+        (i_color = 'burlywood' or i_color = 'navy') and
+        (i_units = 'Bundle' or i_units = 'Each') and
+        (i_size = 'N/A' or i_size = 'extra large')
+        ) or
+        (i_category = 'Men' and
+        (i_color = 'bisque' or i_color = 'azure') and
+        (i_units = 'N/A' or i_units = 'Tsp') and
+        (i_size = 'small' or i_size = 'large')
+        ) or
+        (i_category = 'Men' and
+        (i_color = 'chocolate' or i_color = 'cornflower') and
+        (i_units = 'Bunch' or i_units = 'Gross') and
+        (i_size = 'petite' or i_size = 'medium')
+        ))) or
+       (i_manufact = i1.i_manufact and
+        ((i_category = 'Women' and 
+        (i_color = 'salmon' or i_color = 'midnight') and 
+        (i_units = 'Oz' or i_units = 'Box') and
+        (i_size = 'petite' or i_size = 'medium')
+        ) or
+        (i_category = 'Women' and
+        (i_color = 'snow' or i_color = 'steel') and
+        (i_units = 'Carton' or i_units = 'Tbl') and
+        (i_size = 'N/A' or i_size = 'extra large')
+        ) or
+        (i_category = 'Men' and
+        (i_color = 'purple' or i_color = 'gainsboro') and
+        (i_units = 'Dram' or i_units = 'Unknown') and
+        (i_size = 'small' or i_size = 'large')
+        ) or
+        (i_category = 'Men' and
+        (i_color = 'metallic' or i_color = 'forest') and
+        (i_units = 'Gram' or i_units = 'Ounce') and
+        (i_size = 'petite' or i_size = 'medium')
+        )))) > 0
+ order by i_product_name
+ limit 100;
 
 -- end query 1 in stream 0 using template query41.tpl

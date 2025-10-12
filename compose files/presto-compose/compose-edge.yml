@@ -1,0 +1,41 @@
+services:
+  presto-coordinator:
+    image: prestodb/presto:latest
+    ports:
+      - "8080:8080"
+    networks:
+      - fqe-network
+    volumes:
+      - ./presto-coordinator/config.properties:/opt/presto-server/etc/config.properties
+      - ./presto-coordinator/postgres.properties:/opt/presto-server/etc/catalog/postgres.properties
+      - ./presto-coordinator/mariadb.properties:/opt/presto-server/etc/catalog/mariadb.properties
+      - ./presto-coordinator/mysql_db.properties:/opt/presto-server/etc/catalog/mysql_db.properties
+      - ./jvm.config:/opt/presto-server/etc/jvm.config
+      - ./libjvmkill.so:/opt/presto-server/lib/libjvmkill.so
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -sS http://localhost:8080/|| exit 1" ]
+      interval: "5s"
+      timeout: "5s"
+      retries: 3
+
+  presto-worker:
+    image: prestodb/presto:latest
+    ports:
+      - "8081-8090:8080"
+    networks:
+      - fqe-network
+    volumes:
+      - ./presto-worker/config.properties:/opt/presto-server/etc/config.properties
+      - ./presto-worker/postgres.properties:/opt/presto-server/etc/catalog/postgres.properties
+      - ./presto-worker/mariadb.properties:/opt/presto-server/etc/catalog/mariadb.properties
+      - ./presto-worker/mysql_db.properties:/opt/presto-server/etc/catalog/mysql_db.properties
+      - ./jvm.config:/opt/presto-server/etc/jvm.config
+      - ./libjvmkill.so:/opt/presto-server/lib/libjvmkill.so
+    depends_on:
+      presto-coordinator:
+        condition: service_healthy
+
+networks:
+  fqe-network:
+    name: fqe-network
+    external: true

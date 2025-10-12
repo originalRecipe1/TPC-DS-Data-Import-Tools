@@ -3,16 +3,16 @@ WITH customer_total_return AS
     (SELECT sr_customer_sk AS ctr_customer_sk,
             sr_store_sk AS ctr_store_sk,
             sum(SR_FEE) AS ctr_total_return
-     FROM store_returns,
-          date_dim
+     FROM postgres_ds1.public.store_returns,
+          postgres_ds2.public.date_dim
      WHERE sr_returned_date_sk = d_date_sk
          AND d_year =2000
      GROUP BY sr_customer_sk,
               sr_store_sk)
 SELECT c_customer_id
 FROM customer_total_return ctr1,
-     store,
-     customer
+     postgres_ds3.public.store,
+     postgres_ds2.public.customer
 WHERE ctr1.ctr_total_return >
         (SELECT avg(ctr_total_return)*1.2
          FROM customer_total_return ctr2

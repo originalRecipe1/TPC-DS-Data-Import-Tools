@@ -5,10 +5,10 @@ WITH wscs AS
      FROM
          (SELECT ws_sold_date_sk sold_date_sk ,
                  ws_ext_sales_price sales_price
-          FROM web_sales
+          FROM postgres_ds1.public.web_sales
           UNION ALL SELECT cs_sold_date_sk sold_date_sk ,
                            cs_ext_sales_price sales_price
-          FROM catalog_sales)),
+          FROM postgres_ds2.public.catalog_sales)),
      wswscs AS
     (SELECT d_week_seq,
             sum(CASE
@@ -40,7 +40,7 @@ WITH wscs AS
                     ELSE NULL
                 END) sat_sales
      FROM wscs ,
-          date_dim
+          postgres_ds3.public.date_dim
      WHERE d_date_sk = sold_date_sk
      GROUP BY d_week_seq)
 SELECT d_week_seq1 ,
@@ -61,7 +61,7 @@ FROM
             fri_sales fri_sales1 ,
             sat_sales sat_sales1
      FROM wswscs,
-          date_dim
+          postgres_ds3.public.date_dim
      WHERE date_dim.d_week_seq = wswscs.d_week_seq
          AND d_year = 2001) y,
 
@@ -74,7 +74,7 @@ FROM
             fri_sales fri_sales2 ,
             sat_sales sat_sales2
      FROM wswscs ,
-          date_dim
+          postgres_ds2.public.date_dim
      WHERE date_dim.d_week_seq = wswscs.d_week_seq
          AND d_year = 2001+1) z
 WHERE d_week_seq1=d_week_seq2-53

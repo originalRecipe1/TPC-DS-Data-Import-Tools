@@ -5,11 +5,11 @@ SELECT i_item_id,
        avg(ss_list_price) agg2,
        avg(ss_coupon_amt) agg3,
        avg(ss_sales_price) agg4
-FROM store_sales,
-     customer_demographics,
-     date_dim,
-     item,
-     promotion
+FROM postgres_ds2.public.store_sales,
+     postgres_ds3.public.customer_demographics,
+     postgres_ds1.public.date_dim,
+     postgres_ds2.public.item,
+     postgres_ds3.public.promotion
 WHERE ss_sold_date_sk = d_date_sk
     AND ss_item_sk = i_item_sk
     AND ss_cdemo_sk = cd_demo_sk

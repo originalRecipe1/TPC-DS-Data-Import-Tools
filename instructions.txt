@@ -1,15 +1,12 @@
 # README
 
 1. docker build -t tpcds-test .
-
-2. docker run -it --rm -v tpcds-data:/app/data/tables -v "$(pwd)/schema:/app/data/schema" -v "$(pwd)/queries:/app/data/queries" tpcds-test ./build.sh 1
-
-3. ```shell
+2. ```shell
 	docker run -it --rm \
   	-v tpcds-data:/app/data/tables \
   	-v "$(pwd)/schema:/app/data/schema" \
   	-v "$(pwd)/queries:/app/data/queries" \
-  	tpcds-test ./build.sh 1
+  	test-tpcds ./build.sh 1
    ```
 
 MySQL:

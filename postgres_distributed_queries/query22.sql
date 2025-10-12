@@ -5,9 +5,9 @@ SELECT i_product_name ,
        i_class ,
        i_category ,
        avg(inv_quantity_on_hand) qoh
-FROM inventory ,
-     date_dim ,
-     item
+FROM postgres_ds2.inventory ,
+     postgres_ds1.date_dim ,
+     postgres_ds3.item
 WHERE inv_date_sk=d_date_sk
     AND inv_item_sk=i_item_sk
     AND d_month_seq BETWEEN 1212 AND 1212 + 11

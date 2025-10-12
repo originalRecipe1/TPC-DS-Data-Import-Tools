@@ -1,0 +1,28 @@
+#Based on Dockerfile from Docker Hub, but updated to use a specific version of Dremio
+FROM eclipse-temurin:17-jre AS base
+
+ARG DREMIO_TGZ="https://download.dremio.com/community-server/25.2.0-202410241428100111-a963b970/dremio-community-25.2.0-202410241428100111-a963b970.tar.gz"
+
+RUN addgroup --system dremio \
+    && adduser --system --ingroup dremio dremio \
+    && mkdir -p /opt/dremio /var/{lib,run,log}/dremio \
+    && chown -R dremio:dremio /opt/dremio /var/{lib,run,log}/dremio
+
+RUN wget -q "${DREMIO_TGZ}" -O /tmp/dremio.tgz \
+    && tar -xzf /tmp/dremio.tgz -C /opt/dremio --strip-components=1 \
+    && rm /tmp/dremio.tgz
+
+USER dremio
+WORKDIR /opt/dremio
+
+
+ENV JAVA_TOOL_OPTIONS="--add-opens=java.base/java.nio=ALL-UNNAMED"
+
+ENV DREMIO_HOME=/opt/dremio \
+    DREMIO_PID_DIR=/var/run/dremio \
+    DREMIO_GC_LOGS_ENABLED="no" \
+    DREMIO_LOG_DIR="/var/log/dremio"
+
+EXPOSE 9047 31010 45678
+
+ENTRYPOINT ["bin/dremio", "start-fg"]

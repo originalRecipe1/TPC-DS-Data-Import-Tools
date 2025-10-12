@@ -1,0 +1,33 @@
+[mysqld]
+# MariaDB-specific optimizations for bulk loading (compatible with MariaDB 12.x)
+
+# Basic performance settings
+innodb_buffer_pool_size = 2G
+innodb_log_file_size = 512M
+innodb_log_buffer_size = 64M
+innodb_flush_log_at_trx_commit = 0
+innodb_doublewrite = 0
+max_allowed_packet = 1G
+
+# MariaDB-compatible optimizations
+innodb_adaptive_hash_index = 0
+innodb_read_io_threads = 8
+innodb_write_io_threads = 8
+innodb_io_capacity = 2000
+innodb_io_capacity_max = 4000
+
+# Bulk insert optimizations
+bulk_insert_buffer_size = 256M
+aria_pagecache_buffer_size = 512M
+aria_sort_buffer_size = 256M
+
+# Disable some features during bulk load
+innodb_stats_on_metadata = 0
+innodb_adaptive_flushing = 1
+
+# Query cache (MariaDB handles this differently)
+query_cache_type = 0
+query_cache_size = 0
+
+# Logging optimizations
+sync_binlog = 0
