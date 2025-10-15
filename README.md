@@ -9,12 +9,8 @@ This project provides tools for generating TPC-DS benchmark data and importing i
    ```bash
    docker build -t tpcds-test .
    ```
-2. **Start the database services:**
 
-   ```bash
-   docker compose up -d
-   ```
-3. **Generate chunked data:**
+2. **Generate chunked data:**
 
    ```bash
    # Generate scale-1 data in 4 chunks
@@ -25,22 +21,30 @@ This project provides tools for generating TPC-DS benchmark data and importing i
      -v "$(pwd)/build_chunked.sh:/app/build_chunked.sh" \
      tpcds-test /app/build_chunked.sh 1 4
    ```
+
+3. **Start the database services:**
+
+   ```bash
+   docker compose up -d
+   ```
+
 4. **Install Python dependencies:**
 
    ```bash
    pip install -r requirements.txt
    ```
+
 5. **Import data in parallel:**
 
    ```bash
-   # PostgreSQL
-   python import_postgres.py --data-dir ./data/tables --chunks 4
+   # PostgreSQL (sequential)
+   python import_postgres_sequential.py --chunks 4
 
-   # MySQL
-   python import_mysql.py --data-dir ./data/tables --chunks 4
+   # MySQL (fast parallel)
+   python import_mysql_fast.py --chunks 4
 
-   # MariaDB
-   python import_mariadb.py --data-dir ./data/tables --chunks 4
+   # MariaDB (fast parallel)
+   python import_mariadb_fast.py --chunks 4
    ```
 
 ## Data Generation
@@ -108,48 +112,44 @@ docker compose logs postgres
 ### Test Database Connections
 
 ```bash
-# Simple test
-python test_mysql.py
-
 # Full connection tests
-python import_postgres.py --test-connection
-python import_mysql.py --test-connection
-python import_mariadb.py --test-connection
+python import_postgres_sequential.py --test-connection
+python import_mysql_fast.py --test-connection
+python import_mariadb_fast.py --test-connection
 ```
 
 ### Import Chunked Data (Recommended)
 
 ```bash
-# PostgreSQL - import 4 chunks with 6 parallel workers
-python import_postgres.py --data-dir ./data/tables --chunks 4 --max-workers 6
+# PostgreSQL - import 4 chunks sequentially
+python import_postgres_sequential.py --chunks 4
 
-# MySQL - import chunks
-python import_mysql.py --data-dir ./data/tables --chunks 4 --max-workers 6
+# MySQL - import chunks (use half of available CPU cores for workers)
+python import_mysql_fast.py --chunks 4 --max-workers 4
 
-# MariaDB - import chunks
-python import_mariadb.py --data-dir ./data/tables --chunks 4 --max-workers 6
+# MariaDB - import chunks (use half of available CPU cores for workers)
+python import_mariadb_fast.py --chunks 4 --max-workers 4
 ```
 
 ### Import Combined Data
 
 ```bash
 # If you have single combined files instead of chunks
-python import_postgres.py --combined-data ./data/tables
-python import_mysql.py --combined-data ./data/tables
-python import_mariadb.py --combined-data ./data/tables
+python import_postgres_sequential.py --combined-data
+python import_mysql_fast.py --combined-data
+python import_mariadb_fast.py --combined-data
 ```
 
 ### Custom Connection Parameters
 
 ```bash
 # Custom host/port/credentials
-python import_postgres.py \
+python import_postgres_sequential.py \
   --host myserver.com \
   --port 5432 \
   --database mydb \
   --user myuser \
   --password mypass \
-  --data-dir ./data/tables \
   --chunks 4
 ```
 
@@ -183,9 +183,10 @@ python insert_queries.py
 
 ### Recommended Settings
 
-- **Scale Factor 1**: 2-4 chunks, 2-4 workers
-- **Scale Factor 10**: 4-8 chunks, 4-6 workers
-- **Scale Factor 100+**: 8-16 chunks, 6-12 workers
+- **Workers**: Use half of your available CPU cores for `--max-workers`
+- **Scale Factor 1**: 2-4 chunks
+- **Scale Factor 10**: 4-8 chunks
+- **Scale Factor 100+**: 8-16 chunks
 
 ### Large Scale Generation
 
@@ -201,25 +202,25 @@ python generate_chunks.py \
 ## Project Structure
 
 ```
-├── build.sh                    # Standard TPC-DS generation
-├── build_chunked.sh           # Chunked generation (shell)
-├── generate_chunks.py         # Chunked generation (Python)
-├── import_postgres.py         # PostgreSQL parallel importer
-├── import_mysql.py            # MySQL parallel importer
-├── import_mariadb.py          # MariaDB parallel importer
-├── distribute.py              # Federated query generator
-├── compose.yml                # Multi-database Docker setup
-├── schema/                    # TPC-DS table definitions
+├── build.sh                       # Standard TPC-DS generation
+├── build_chunked.sh              # Chunked generation (shell)
+├── generate_chunks.py            # Chunked generation (Python)
+├── import_postgres_sequential.py # PostgreSQL sequential importer
+├── import_mysql_fast.py          # MySQL fast parallel importer
+├── import_mariadb_fast.py        # MariaDB fast parallel importer
+├── distribute.py                 # Federated query generator
+├── compose.yml                   # Multi-database Docker setup
+├── schema/                       # TPC-DS table definitions
 │   ├── tpcds.sql
 │   ├── tpcds_ri.sql
 │   └── tpcds_source.sql
-├── queries/                   # Standard TPC-DS queries (1-99)
-├── compose files/             # Database-specific compose files
+├── queries/                      # Standard TPC-DS queries (1-99)
+├── compose files/                # Database-specific compose files
 │   ├── dremio-compose/
 │   ├── spark-compose/
 │   ├── trino-compose/
 │   └── presto-compose/
-└── data/tables/               # Generated data location
+└── data/tables/                  # Generated data location
     ├── chunk_1/
     ├── chunk_2/
     └── ...
