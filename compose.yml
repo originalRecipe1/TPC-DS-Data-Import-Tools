@@ -3,10 +3,11 @@ services:
     image: postgres:latest
     container_name: postgres_ds
     environment:
-      PGDATA: /var/lib/postgresql/data/pgdata
       POSTGRES_DB: db1
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123456
+    networks:
+      - fqe-network
     ports:
       - "5439:5432"
     volumes:
@@ -22,6 +23,8 @@ services:
       MYSQL_DATABASE: db1
       MYSQL_USER: mysql
       MYSQL_PASSWORD: 123456
+    networks:
+      - fqe-network
     ports:
       - "3308:3306"
     volumes:
@@ -39,6 +42,8 @@ services:
       MYSQL_DATABASE: db1
       MYSQL_USER: mariadb
       MYSQL_PASSWORD: 123456
+    networks:
+      - fqe-network
     ports:
       - "3309:3306"
     volumes:
@@ -55,3 +60,6 @@ volumes:
   tpcds-data:
     external: true
 
+networks:
+  fqe-network:
+    external: true

@@ -1,0 +1,5 @@
+{
+  "postgres":["public"],
+  "mariadb":["db1"],
+  "mysql":["db1"]
+}

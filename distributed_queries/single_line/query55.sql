@@ -1,0 +1,1 @@
+SELECT i_brand_id AS brand_id, i_brand AS brand, SUM(ss_ext_sales_price) AS ext_price FROM mysql.db1.date_dim, mariadb.db1.store_sales, postgres.public.item WHERE d_date_sk = ss_sold_date_sk AND ss_item_sk = i_item_sk AND i_manager_id = 36 AND d_moy = 12 AND d_year = 2001 GROUP BY i_brand, i_brand_id ORDER BY ext_price DESC, i_brand_id NULLS FIRST LIMIT 100
